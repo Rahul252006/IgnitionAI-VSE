@@ -1,0 +1,92 @@
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ignitionai-vse"
+version = "0.1.0"
+description = "IgnitionAI Virtual Sensor Engine"
+requires-python = ">=3.11"
+dependencies = [
+    "pydantic==2.14.1",
+    "sympy==1.14.0",
+    "pint==0.26.2",
+    "numpy==2.5.4",
+    "onnxruntime==1.31.1",
+    "lightgbm==4.7.0",
+    "PyYAML==6.0.3",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest==9.2.0",
+    "hypothesis==6.170.13",
+    "import-linter==2.15",
+]
+
+[tool.setuptools.packages.find]
+include = ["vse*"]
+
+
+[tool.importlinter]
+root_packages = ["vse"]
+
+[[tool.importlinter.contracts]]
+name = "Contracts must not import VSE implementation"
+type = "forbidden"
+source_modules = ["vse.contracts"]
+forbidden_modules = [
+    "vse.api",
+    "vse.registry",
+    "vse.compiler",
+    "vse.planner",
+    "vse.alignment",
+    "vse.arena",
+    "vse.executor",
+    "vse.runners",
+    "vse.quality",
+    "vse.residuals",
+    "vse.provenance",
+    "vse.observers",
+    "vse.testing",
+]
+
+[[tool.importlinter.contracts]]
+name = "Observers depend only on contracts"
+type = "forbidden"
+source_modules = ["vse.observers"]
+forbidden_modules = [
+    "vse.api",
+    "vse.registry",
+    "vse.compiler",
+    "vse.planner",
+    "vse.alignment",
+    "vse.arena",
+    "vse.executor",
+    "vse.runners",
+    "vse.quality",
+    "vse.residuals",
+    "vse.provenance",
+    "vse.testing",
+]
+
+[[tool.importlinter.contracts]]
+name = "Only registry owns file access"
+type = "forbidden"
+source_modules = [
+    "vse.api",
+    "vse.contracts",
+    "vse.compiler",
+    "vse.planner",
+    "vse.alignment",
+    "vse.arena",
+    "vse.executor",
+    "vse.runners",
+    "vse.quality",
+    "vse.residuals",
+    "vse.provenance",
+    "vse.observers",
+    "vse.testing",
+]
+forbidden_modules = ["vse.registry.file_access"]
